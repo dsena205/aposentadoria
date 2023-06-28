@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val idade = findViewById<EditText>(R.id.editidade)
         val calcular = findViewById<Button>(R.id.button)
         val resultadoo = findViewById<TextView>(R.id.resultado)
-        
+
         var dblidade = 0
         var msg = "você é menor de idade"
         var msgs = "selecione o sexo"
@@ -34,32 +34,52 @@ class MainActivity : AppCompatActivity() {
 
         calcular.setOnClickListener {
 
-            dblidade = idade.text.toString().toInt()
-
-            if (idade.text.isEmpty()) {
-                idade.error = "preencha sua idade"
-            }
-            if (!feminno.isChecked || !masculino.isChecked) {
-
-                //feminno.error= "selecione o sexo"
-                // masculino.error= "seleione o sexo"
+            //Validação se esta marcado o feminino ou o masculino
+            if (!feminno.isChecked && !masculino.isChecked) {
                 Toast.makeText(this, msgs, Toast.LENGTH_LONG).show()
             }
-            if (dblidade < 18) {
 
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-
-            }else if (feminno.isChecked) {
-
-                dblidade = dblidade - 60
-                Toast.makeText(this, msga + dblidade, Toast.LENGTH_LONG).show()
-
-            }else if(masculino.isChecked){
-                dblidade= dblidade - 65
-                Toast.makeText(this, msga + dblidade, Toast.LENGTH_LONG).show()
+            //verifica se a idade está preenchida
+            if (idade.text.isEmpty() || idade.text.isNullOrBlank()) {
+                idade.error = "preencha sua idade"
             }
+            //se não tiver preenchida, validar se é maior de idade
+            else if (idade.text.toString().toInt() < 18) {
+                Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+            } else if (idade.text.toString().toInt() > 18) {
 
+                //se for maior de idade, coloca o valor da idade na variavel dblidade
+                dblidade = idade.text.toString().toInt();
 
+                //se a pessoa for uma mulher, calcula a regra para mulher
+                if (feminno.isChecked) {
+                    val quantoTempoFalta = 60 - dblidade
+
+                    //valida se a pessoa ja se aposentou
+                    if (quantoTempoFalta <= 0) {
+                        Toast.makeText(this, "Você já está aposentada!", Toast.LENGTH_LONG).show()
+                    } else {
+                        //se ainda faltar alguns anos para ela se aposentar, mostrar quanto falta
+                       // Toast.makeText(this, msga + quantoTempoFalta, Toast.LENGTH_LONG).show()
+                        resultadoo.setText(msga+quantoTempoFalta+" anos")
+                    }
+
+              //se a pessoa for um homem, calcula a regra para homem
+                } else if (masculino.isChecked) {
+                    val quantoTempoFalta = 65 - dblidade
+
+                    //valida se a pessoa ja se aposentou
+                    if (quantoTempoFalta <= 0) {
+                        Toast.makeText(this, "Você já está aposentado!", Toast.LENGTH_LONG).show()
+                    } else {
+                        //se ainda faltar alguns anos para ele se aposentar, mostrar quanto falta
+                        //Toast.makeText(this, msga + quantoTempoFalta, Toast.LENGTH_LONG).show()
+                        resultadoo.setText(msga+quantoTempoFalta+" anos")
+                    }
+
+                }
+
+            }
         }
     }
 }
